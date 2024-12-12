@@ -1,8 +1,10 @@
 import { Elysia } from "elysia";
 import jwt from "@elysiajs/jwt";
 import cors from "@elysiajs/cors";
-import { UserController } from "./controllers/UserController";
 import { DeviceController } from "./controllers/DeviceController";
+import { SectionController } from "./controllers/SectionController";
+import { DepartmentController } from "./controllers/DepartmentController";
+import { UserController } from "./controllers/UserController";
 
 const app = new Elysia()
 .use(cors())
@@ -14,10 +16,11 @@ const app = new Elysia()
 
   // user
   .post("/api/user/sign-in", UserController.signIn)
-  .put("/api/user/update", UserController.update)
+  .put("/api/user/update-profile", UserController.updateProfile)
   .get("/api/user/list", UserController.list)
   .post("/api/user/create-user", UserController.createUser)
   .put("/api/user/update-user/:id", UserController.updateUser)
+  .delete("/api/user/remove-user/:id", UserController.removeUser)
 
   // device 
   .post("/api/device/create", DeviceController.create)
@@ -25,8 +28,13 @@ const app = new Elysia()
   .put("/api/device/update/:id", DeviceController.update)
   .delete("/api/device/remove/:id", DeviceController.remove)
 
-  // listen
+  // department
+  .get("/api/department/list", DepartmentController.list)
 
+  // section
+  .get("/api/section/list-by-department/:departmentId", SectionController.listByDepartment)
+
+  // listen
   .listen(3002);
 
 console.log(

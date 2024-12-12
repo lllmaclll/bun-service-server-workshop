@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { password } from "bun";
 
 const prisma = new PrismaClient()
 
@@ -36,7 +35,7 @@ export const UserController = {
             return error
         }
     },
-    update: async ({ body, request, jwt }: {
+    updateProfile: async ({ body, request, jwt }: {
         body: {
             username: string,
             password: string
@@ -54,7 +53,7 @@ export const UserController = {
             })
             const newData = {
                 username: body.username,
-                password: body.password ?? oldUser?.password
+                password: body.password == '' ? oldUser?.password : body.password
             }
 
             await prisma.user.update({
@@ -90,19 +89,24 @@ export const UserController = {
     },
     createUser: async ({ body }: {
         body: {
-            username: string,
-            password: string,
+            username: string;
+            password: string;
             level: string;
+            sectionId: string;
         }
     }) => {
         try {
             await prisma.user.create({
-                data: body
+                // data: body
+                data: {
+                    ...body,
+                    sectionId: body.sectionId ? parseInt(body.sectionId, 10) : null // Convert sectionId to number or null
+                }
             })
 
             return { message: "success" }
         } catch (error) {
-            return error
+            return error;
         }
     },
     updateUser: async ({ body, params }: {
@@ -110,32 +114,54 @@ export const UserController = {
             username: string;
             password: string;
             level: string;
+            sectionId: number;
         },
         params: {
-            id: string
+            id: string;
         }
     }) => {
         try {
             const oldUser = await prisma.user.findUnique({
-                select: {
+                select: { 
                     password: true
                 },
                 where: {
-                    id: parseInt(params.id)
+                    id: parseInt(params.id) 
                 }
             })
 
             const newData = {
                 username: body.username,
-                password: body.password ?? oldUser?.password,
-                level: body.level
+                password: body.password == '' ? oldUser?.password : body.password,
+                level: body.level,
+                sectionId: body.sectionId
             }
 
             await prisma.user.update({
                 where: {
-                    id: parseInt(params.id)
+                    id: parseInt(params.id) 
                 },
                 data: newData
+            })
+
+            return { message: "success" }
+        } catch (error) {
+            return error;
+        }
+    },
+    removeUser: async ({ params }: {
+        params: {
+            id: string;
+        }
+    }) => {
+        try {
+            await prisma.user.update({
+                where: {
+                    id: parseInt(params.id)
+                },
+                data: {
+                    status: "inactive"
+                }
             })
 
             return { message: "success" }

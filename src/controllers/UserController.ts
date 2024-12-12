@@ -72,7 +72,19 @@ export const UserController = {
                 select: {
                     id: true,
                     username: true,
-                    level: true
+                    level: true,
+                    section: {
+                        select: {
+                            id: true,
+                            name: true,
+                            department: {
+                                select: {
+                                    id: true,
+                                    name: true
+                                }
+                            }
+                        }
+                    },
                 },
                 where: {
                     status: 'active'
@@ -92,16 +104,16 @@ export const UserController = {
             username: string;
             password: string;
             level: string;
-            sectionId: string;
+            sectionId: number;
         }
     }) => {
         try {
             await prisma.user.create({
-                // data: body
-                data: {
-                    ...body,
-                    sectionId: body.sectionId ? parseInt(body.sectionId, 10) : null // Convert sectionId to number or null
-                }
+                data: body
+                // data: {
+                //     ...body,
+                //     sectionId: body.sectionId ? parseInt(body.sectionId, 10) : null // Convert sectionId to number or null
+                // }
             })
 
             return { message: "success" }

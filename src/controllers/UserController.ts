@@ -110,10 +110,6 @@ export const UserController = {
         try {
             await prisma.user.create({
                 data: body
-                // data: {
-                //     ...body,
-                //     sectionId: body.sectionId ? parseInt(body.sectionId, 10) : null // Convert sectionId to number or null
-                // }
             })
 
             return { message: "success" }

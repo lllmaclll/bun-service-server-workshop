@@ -15,6 +15,7 @@ export const RepairRecordController = {
                     id: "desc"
                 }
             });
+            
             return repairRecords;
         } catch (error) {
             return error;
@@ -30,6 +31,7 @@ export const RepairRecordController = {
             deviceSerial?: string;
             problem: string;
             solving?: string;
+            expireDate?: Date;
         },
         request: any,
         jwt: any
@@ -38,6 +40,7 @@ export const RepairRecordController = {
             const row = await prisma.repairRecord.create({
                 data: body
             });
+
             return { message: "success", row: row };
         } catch (error) {
             return error;

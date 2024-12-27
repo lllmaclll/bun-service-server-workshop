@@ -4,9 +4,6 @@ export const RepairRecordController = {
     list: async () => {
         try {
             const repairRecords = await prisma.repairRecord.findMany({
-                where: {
-                    status: "active"
-                },
                 include: {
                     device: true,
                     user: true
@@ -88,6 +85,29 @@ export const RepairRecordController = {
                 data: {
                     status: "inactive"
                 }
+            });
+
+            return { message: "success" };
+        } catch (error) {
+            return error;
+        }
+    },
+    updateStatus: async ({ body, params }: {
+        body: {
+            status: string;
+            solving: string;
+            engineerId: number;
+        },
+        params: {
+            id: string
+        }
+    }) => {
+        try {
+            await prisma.repairRecord.update({
+                where: {
+                    id: parseInt(params.id)
+                },
+                data: body
             });
 
             return { message: "success" };

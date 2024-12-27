@@ -22,6 +22,7 @@ const app = new Elysia()
   .post("/api/user/create-user", UserController.createUser)
   .put("/api/user/update-user/:id", UserController.updateUser)
   .delete("/api/user/remove-user/:id", UserController.removeUser)
+  .get("/api/user/list-engineer", UserController.listEngineer)
 
   // device 
   .post("/api/device/create", DeviceController.create)
@@ -40,6 +41,7 @@ const app = new Elysia()
   .post("/api/repair-record/create", RepairRecordController.create)
   .put("/api/repair-record/update/:id", RepairRecordController.update)
   .delete("/api/repair-record/remove/:id", RepairRecordController.remove)
+  .put("/api/repair-record/update-status/:id", RepairRecordController.updateStatus)
 
   // listen
   .listen(3002);

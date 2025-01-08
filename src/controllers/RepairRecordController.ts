@@ -12,8 +12,27 @@ export const RepairRecordController = {
                     id: "desc"
                 }
             });
+
+            let list = []
+
+            for (const repairRecord of repairRecords) {
+                if (repairRecord.engineerId) {
+                    const engineer = await prisma.user.findUnique({
+                        select: {
+                            username: true
+                        },
+                        where: {
+                            id: repairRecord.engineerId
+                        }
+                    })
+    
+                    list.push({ ...repairRecord, engineer })
+                } else {
+                    list.push(repairRecord)
+                }
+            }
             
-            return repairRecords;
+            return list;
         } catch (error) {
             return error;
         }
@@ -111,6 +130,29 @@ export const RepairRecordController = {
             });
 
             return { message: "success" };
+        } catch (error) {
+            return error;
+        }
+    },
+    receive: async ({ body }: {
+        body: {
+            amount: number;
+            id: number;
+        }
+    }) => {
+        try {
+            await prisma.repairRecord.update({
+                where: {
+                    id: body.id
+                },
+                data: {
+                    amount: body.amount,
+                    payDate: new Date(),
+                    status: "complete"
+                }
+            })
+
+            return { message: "success" }
         } catch (error) {
             return error;
         }

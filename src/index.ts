@@ -6,6 +6,7 @@ import { SectionController } from "./controllers/SectionController";
 import { DepartmentController } from "./controllers/DepartmentController";
 import { UserController } from "./controllers/UserController";
 import { RepairRecordController } from "./controllers/RepairRecordController";
+import { CompanyController } from "./controllers/CompanyController";
 
 const app = new Elysia()
 .use(cors())
@@ -43,6 +44,11 @@ const app = new Elysia()
   .delete("/api/repair-record/remove/:id", RepairRecordController.remove)
   .put("/api/repair-record/update-status/:id", RepairRecordController.updateStatus)
   .put("/api/repair-record/receive", RepairRecordController.receive)
+  .get("/api/income/report/:startDate/:endDate", RepairRecordController.report)
+
+  // company
+  .get("/api/company/info", CompanyController.info)
+  .put("/api/company/update", CompanyController.update)
 
   // listen
   .listen(3002);

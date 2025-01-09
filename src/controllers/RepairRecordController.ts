@@ -156,5 +156,33 @@ export const RepairRecordController = {
         } catch (error) {
             return error;
         }
+    },
+    report: async ({ params }: {
+        params: {
+            startDate: string;
+            endDate: string;
+        }
+    }) => {
+        try {
+            const startDate = new Date(params.startDate)
+            const endDate =  new Date(params.endDate)
+
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 999)
+
+            const repairRecords = await prisma.repairRecord.findMany({
+                where: {
+                    payDate: {
+                        gte: startDate,
+                        lte: endDate
+                    },
+                    status: "complete"
+                }
+            })
+
+            return repairRecords
+        } catch (error) {
+            return error
+        }
     }
 }

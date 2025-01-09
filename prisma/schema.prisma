@@ -81,5 +81,15 @@ model RepairRecord {
   expireDate        DateTime?
 }
 
+model Company {
+  id           Int     @id @default(autoincrement())
+  name         String
+  address      String
+  phone        String
+  email        String
+  facebookPage String?
+  taxCode      String
+}
+
 // bunx prisma db push
 // bunx prisma generate

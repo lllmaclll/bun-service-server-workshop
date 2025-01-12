@@ -184,5 +184,39 @@ export const RepairRecordController = {
         } catch (error) {
             return error
         }
+    },
+    dashboard: async () => {
+        try {
+            const totalRepairRecords = await prisma.repairRecord.count()
+            const totalRepairRecordComplete = await prisma.repairRecord.count({
+                where: {
+                    status: "complete"
+                }
+            })
+            const totalRepairRecordNotComplete = await prisma.repairRecord.count({
+                where: {
+                    status: {
+                        not: "complete"
+                    }
+                }
+            })
+            const totalAmount = await prisma.repairRecord.aggregate({
+                _sum: {
+                    amount: true
+                },
+                where: {
+                    status: "complete"
+                }
+            })
+
+            return { 
+                totalRepairRecords: totalRepairRecords,
+                totalRepairRecordComplete: totalRepairRecordComplete,
+                totalRepairRecordNotComplete: totalRepairRecordNotComplete,
+                totalAmount: totalAmount._sum.amount
+            }
+        } catch (error) {
+            return error
+        }
     }
 }

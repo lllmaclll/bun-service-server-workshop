@@ -45,6 +45,7 @@ const app = new Elysia()
   .put("/api/repair-record/update-status/:id", RepairRecordController.updateStatus)
   .put("/api/repair-record/receive", RepairRecordController.receive)
   .get("/api/income/report/:startDate/:endDate", RepairRecordController.report)
+  .get("/api/repair-record/dashboard", RepairRecordController.dashboard)
 
   // company
   .get("/api/company/info", CompanyController.info)

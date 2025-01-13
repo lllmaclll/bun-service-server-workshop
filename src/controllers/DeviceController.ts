@@ -22,18 +22,34 @@ export const DeviceController = {
             return error
         }
     },
-    list: async () => {
+    list: async ({ query }: {
+        query: {
+            page: string;
+            pageSize: string;
+        }
+    }) => {
         try {
+            const page = parseInt(query.page)
+            const pageSize = parseInt(query.pageSize)
+            const totalRows = await prisma.device.count({
+                where: {
+                    status: 'active'
+                }
+            })
+            const totalPage = Math.ceil(totalRows / pageSize)
+
             const devices = await prisma.device.findMany({
                 where: {
                     status: 'active'
                 },
                 orderBy: {
                     id: 'desc'
-                }
+                },
+                skip: (page - 1) * pageSize,
+                take: pageSize
             })
 
-            return devices
+            return { results: devices, totalPage: totalPage }
         } catch (error) {
             return error
         }

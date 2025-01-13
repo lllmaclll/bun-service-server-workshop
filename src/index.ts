@@ -41,6 +41,7 @@ const app = new Elysia()
   .put("/api/user/update-user/:id", UserController.updateUser)
   .delete("/api/user/remove-user/:id", UserController.removeUser)
   .get("/api/user/list-engineer", UserController.listEngineer)
+  .get("/api/user/level", UserController.level)
 
   // device 
   .post("/api/device/create", DeviceController.create)
@@ -63,6 +64,7 @@ const app = new Elysia()
   .put("/api/repair-record/receive", RepairRecordController.receive)
   .get("/api/income/report/:startDate/:endDate", RepairRecordController.report)
   .get("/api/repair-record/dashboard", RepairRecordController.dashboard)
+  .get("/api/repair-record/income-per-month", RepairRecordController.incomePerMonth)
 
   // company
   .get("/api/company/info", CompanyController.info, { beforeHandle: checkSignIn }) // use middleware to check token
